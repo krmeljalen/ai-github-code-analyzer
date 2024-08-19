@@ -14,9 +14,8 @@ def chat_loop(session_state):
     while True:
         user_input = input("Question: ")
         if user_input.strip().upper() == "EOF":
-            print("Ending chat...")
+            logs.log.info("Ending chat...")
             break
-
         ollama.context_chat(prompt=user_input, query_engine=session_state.query_engine)
         print()
 

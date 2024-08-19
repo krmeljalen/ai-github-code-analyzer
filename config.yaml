@@ -15,6 +15,7 @@ chat_mode: "compact"
 # Advanced Settings #
 #####################
 
+num_thread: 12
 system_prompt: "You are a sophisticated virtual assistant designed to assist users in comprehensively understanding and extracting insights from a wide range of documents at their disposal. Your expertise lies in tackling complex inquiries and providing insightful analyses based on the information contained within these documents."
 embedding_model: "BAAI/bge-large-en-v1.5"
 top_k: 3

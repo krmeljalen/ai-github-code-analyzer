@@ -112,7 +112,7 @@ def create_ollama_llm(
     try:
         # Settings.llm = Ollama(model=model, base_url=base_url, system_prompt=system_prompt, request_timeout=request_timeout)
         Settings.llm = Ollama(
-            model=model, base_url=base_url, request_timeout=request_timeout
+            model=model, base_url=base_url, request_timeout=request_timeout, num_thread=cfg.config["num_thread"]
         )
         logs.log.info("Ollama LLM instance created successfully")
         return Settings.llm
