@@ -7,6 +7,7 @@ import utils.ollama as ollama
 import utils.llama_index as llama_index
 import utils.logs as logs
 
+
 def rag_pipeline(session_state):
     """
     RAG pipeline for Llama-based chatbots.
@@ -65,10 +66,7 @@ def rag_pipeline(session_state):
     #######################################
 
     # if documents already exists in state
-    if (
-        session_state.documents is not None
-        and len(session_state.documents) > 0
-    ):
+    if session_state.documents is not None and len(session_state.documents) > 0:
         logs.log.info("Documents are already available; skipping document loading")
         logs.log.info("Processed File Data")
     else:
@@ -86,7 +84,7 @@ def rag_pipeline(session_state):
     ###########################################
 
     try:
-        llama_index.create_query_engine(
+        session_state.query_engine = llama_index.create_query_engine(
             session_state.documents,
         )
         logs.log.info("Created File Index")
