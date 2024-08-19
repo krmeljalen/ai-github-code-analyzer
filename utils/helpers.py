@@ -3,8 +3,6 @@ import json
 import requests
 import subprocess
 
-import streamlit as st
-
 from exiftool import ExifToolHelper
 
 import utils.logs as logs
@@ -102,7 +100,7 @@ def clone_github_repo(repo: str):
             return False
 
     else:
-        Exception(f"Failed to process GitHub repo {st.session_state['github_repo']}")
+        Exception(f"Failed to process GitHub repo {repo}")
         return False
 
 

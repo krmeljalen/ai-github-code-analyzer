@@ -1,9 +1,8 @@
 import os
-
-import streamlit as st
+import sys
 
 import utils.logs as logs
-
+import utils.config as cfg
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
 
 # This is not used but required by llama-index and must be set FIRST
@@ -16,7 +15,6 @@ from llama_index.core import (
 )
 
 
-
 ###################################
 #
 # Setup Embedding Model
@@ -24,7 +22,6 @@ from llama_index.core import (
 ###################################
 
 
-@st.cache_resource(show_spinner=False)
 def setup_embedding_model(
     model: str,
 ):
@@ -45,6 +42,7 @@ def setup_embedding_model(
     """
     try:
         from torch import cuda
+
         device = "cpu" if not cuda.is_available() else "cuda"
     except:
         device = "cpu"
@@ -58,7 +56,7 @@ def setup_embedding_model(
         )
 
         logs.log.info(f"Embedding model created successfully")
-        
+
         return
     except Exception as err:
         print(f"Failed to setup the embedding model: {err}")
@@ -111,7 +109,6 @@ def load_documents(data_dir: str):
 ###################################
 
 
-@st.cache_resource(show_spinner=False)
 def create_index(_documents):
     """
     Creates an index from the provided documents and service context.
@@ -149,7 +146,6 @@ def create_index(_documents):
 ###################################
 
 
-# @st.cache_resource(show_spinner=False)
 def create_query_engine(_documents):
     """
     Creates a query engine from the provided documents and service context.
@@ -172,16 +168,12 @@ def create_query_engine(_documents):
         index = create_index(_documents)
 
         query_engine = index.as_query_engine(
-            similarity_top_k=st.session_state["top_k"],
-            response_mode=st.session_state["chat_mode"],
+            similarity_top_k=cfg.config["top_k"],
+            response_mode=cfg.config["chat_mode"],
             streaming=True,
         )
-
-        st.session_state["query_engine"] = query_engine
-
         logs.log.info("Query Engine created successfully")
-
         return query_engine
     except Exception as e:
         logs.log.error(f"Error when creating Query Engine: {e}")
-        raise Exception(f"Error when creating Query Engine: {e}")
+        sys.exit(1)

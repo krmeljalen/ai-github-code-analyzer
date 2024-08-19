@@ -1,8 +1,7 @@
 import ollama
 import os
 
-import streamlit as st
-
+import utils.config as cfg
 import utils.logs as logs
 
 # This is not used but required by llama-index and must be imported FIRST
@@ -67,16 +66,14 @@ def get_models():
         The function raises an exception if there is an error retrieving the list of models.
 
     Side Effects:
-        - st.session_state["ollama_models"] is set to the list of available language models.
+        - cfg.config["ollama_models"] is set to the list of available language models.
     """
     try:
-        chat_client = create_client(st.session_state["ollama_endpoint"])
+        chat_client = create_client(cfg.config["ollama_endpoint"])
         data = chat_client.list()
         models = []
         for model in data["models"]:
             models.append(model["name"])
-
-        st.session_state["ollama_models"] = models
 
         if len(models) > 0:
             logs.log.info("Ollama models loaded successfully")
@@ -98,8 +95,9 @@ def get_models():
 ###################################
 
 
-@st.cache_data(show_spinner=False)
-def create_ollama_llm(model: str, base_url: str, system_prompt: str = None, request_timeout: int = 60) -> Ollama:
+def create_ollama_llm(
+    model: str, base_url: str, system_prompt: str = None, request_timeout: int = 60
+) -> Ollama:
     """
     Create an instance of the Ollama language model.
 
@@ -113,7 +111,9 @@ def create_ollama_llm(model: str, base_url: str, system_prompt: str = None, requ
     """
     try:
         # Settings.llm = Ollama(model=model, base_url=base_url, system_prompt=system_prompt, request_timeout=request_timeout)
-        Settings.llm = Ollama(model=model, base_url=base_url, request_timeout=request_timeout)
+        Settings.llm = Ollama(
+            model=model, base_url=base_url, request_timeout=request_timeout
+        )
         logs.log.info("Ollama LLM instance created successfully")
         return Settings.llm
     except Exception as e:
@@ -141,8 +141,8 @@ def chat(prompt: str):
 
     try:
         llm = create_ollama_llm(
-            st.session_state["selected_model"],
-            st.session_state["ollama_endpoint"],
+            cfg.config["selected_model"],
+            cfg.config["ollama_endpoint"],
         )
         stream = llm.stream_complete(prompt)
         for chunk in stream:
@@ -189,8 +189,7 @@ def context_chat(prompt: str, query_engine: RetrieverQueryEngine):
     try:
         stream = query_engine.query(prompt)
         for text in stream.response_gen:
-            # print(str(text), end="", flush=True)
-            yield str(text)
+            print(str(text), end="", flush=True)
     except Exception as err:
         logs.log.error(f"Ollama chat stream error: {err}")
         return
