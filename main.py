@@ -3,6 +3,7 @@ import utils.helpers as helpers
 import utils.rag_pipeline as rag
 import utils.ollama as ollama
 import utils.logs as logs
+import utils.config as cfg
 from utils.session_state import SessionState
 
 
@@ -19,7 +20,7 @@ def chat_loop(session_state):
         ollama.context_chat(prompt=user_input, query_engine=session_state.query_engine)
         print()
 
-def run(repo="krmeljalen/kdeploy"):
+def run(repo):
     session_state = SessionState()
 
     helpers.clone_github_repo(repo)
@@ -37,4 +38,4 @@ def run(repo="krmeljalen/kdeploy"):
 
 
 if __name__ == "__main__":
-    run()
+    run(cfg.config["repo"])
