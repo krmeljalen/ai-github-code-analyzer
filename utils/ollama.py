@@ -96,7 +96,7 @@ def get_models():
 
 
 def create_ollama_llm(
-    model: str, base_url: str, system_prompt: str = None, request_timeout: int = 60
+    model: str, base_url: str, system_prompt: str = None, request_timeout: int = 300
 ) -> Ollama:
     """
     Create an instance of the Ollama language model.
