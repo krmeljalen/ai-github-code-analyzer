@@ -1,5 +1,5 @@
 # ai-rating
-AI rating application that checks out your github repos, analyzes the code and gives you some feedback.
+AI rating application that checks out your github repos, analyzes the code and gives you feedback on the questions you may have about it.
 
 ## Prerequirements
 Have ollama running on localhost, make sure you downloaded your model ie. llama3.1:8b
